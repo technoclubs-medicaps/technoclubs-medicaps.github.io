@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Techno Clubs - Certificate Verification</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#16181d;--muted:#6b7280;--line:#e5e7eb;--brand:#4b2a82;--bad:#b91c1c}
+  @media (prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--muted:#9aa3af;--line:#2a2f3a;--brand:#a78bfa;--bad:#f87171}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,system-ui,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:520px;margin:0 auto;padding:40px 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .org{color:var(--muted);font-size:13px;text-align:center}
+  h1{font-size:22px;margin:4px 0 22px;text-align:center}
+  label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
+  input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;
+        background:var(--card);color:var(--ink);text-transform:uppercase;letter-spacing:.04em}
+  button{margin-top:12px;width:100%;padding:11px;border:0;border-radius:9px;background:var(--brand);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+  .muted{color:var(--muted);font-size:13px}
+  .err{color:var(--bad);font-size:13px;min-height:18px;margin-top:8px}
+  .spin{text-align:center;padding:10px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="org">Techno Clubs &middot; Centre for Innovation &middot; Medicaps University</div>
+  <h1>Certificate verification</h1>
+  <div class="card" id="box">
+    <form id="f" autocomplete="off">
+      <label for="id">Certificate ID</label>
+      <input id="id" placeholder="TC-2026-0042-K7M or TECHNO-25-045" maxlength="20">
+      <div class="err" id="err"></div>
+      <button type="submit">Verify</button>
+      <p class="muted">The ID is printed beside the QR code on the certificate. Scanning the QR code brings you here automatically.</p>
+    </form>
+  </div>
+</div>
+<script>
+  // Only this line changes if the verification service ever moves.
+  // Paste the PUBLIC web app URL (ends in /exec) between the quotes.
+  var SCRIPT_URL = "https://script.google.com/a/macros/medicaps.ac.in/s/AKfycbxyQd9Lj9KSQV1W1ayUtXzMhnvj1Oog2GXkX-DrQ5bkxFTG5sDJ42moqoxeSCCcJMFwsg/exec";
+
+  var ID_RE = /^(TC-\d{4}-\d{4}-[A-Z0-9]{3}|TECHNO-\d{2}-\d{3,4})$/;
+  function go(id) {
+    id = String(id || "").trim().toUpperCase();
+    if (!ID_RE.test(id)) { document.getElementById("err").textContent = "That is not a valid certificate ID. It looks like TC-2026-0042-K7M or TECHNO-25-045."; return; }
+    if (SCRIPT_URL.indexOf("/exec") < 0) { document.getElementById("err").textContent = "Verification is not configured yet."; return; }
+    document.getElementById("box").innerHTML = '<div class="spin">Checking <b>' + id + '</b> against the register&hellip;</div>';
+    window.location.replace(SCRIPT_URL + "?id=" + encodeURIComponent(id));
+  }
+  var q = new URLSearchParams(window.location.search).get("id");
+  if (q) go(q);
+  document.getElementById("f").addEventListener("submit", function (e) { e.preventDefault(); go(document.getElementById("id").value); });
+</script>
+</body>
+</html>
