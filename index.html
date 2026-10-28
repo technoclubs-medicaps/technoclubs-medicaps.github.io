@@ -30,7 +30,7 @@
   <div class="card" id="box">
     <form id="f" autocomplete="off">
       <label for="id">Certificate ID</label>
-      <input id="id" placeholder="TC-2026-0042-K7M" maxlength="20">
+      <input id="id" placeholder="TC-2026-0042-K7M or TECHNO-25-045" maxlength="20">
       <div class="err" id="err"></div>
       <button type="submit">Verify</button>
       <p class="muted">The ID is printed beside the QR code on the certificate. Scanning the QR code brings you here automatically.</p>
@@ -42,10 +42,10 @@
   // Paste the PUBLIC web app URL (ends in /exec) between the quotes.
   var SCRIPT_URL = "https://script.google.com/a/macros/medicaps.ac.in/s/AKfycbxyQd9Lj9KSQV1W1ayUtXzMhnvj1Oog2GXkX-DrQ5bkxFTG5sDJ42moqoxeSCCcJMFwsg/exec";
 
-  var ID_RE = /^TC-\d{4}-\d{4}-[A-Z0-9]{3}$/;
+  var ID_RE = /^(TC-\d{4}-\d{4}-[A-Z0-9]{3}|TECHNO-\d{2}-\d{3,4})$/;
   function go(id) {
     id = String(id || "").trim().toUpperCase();
-    if (!ID_RE.test(id)) { document.getElementById("err").textContent = "That is not a valid certificate ID. It looks like TC-2026-0042-K7M."; return; }
+    if (!ID_RE.test(id)) { document.getElementById("err").textContent = "That is not a valid certificate ID. It looks like TC-2026-0042-K7M or TECHNO-25-045."; return; }
     if (SCRIPT_URL.indexOf("/exec") < 0) { document.getElementById("err").textContent = "Verification is not configured yet."; return; }
     document.getElementById("box").innerHTML = '<div class="spin">Checking <b>' + id + '</b> against the register&hellip;</div>';
     window.location.replace(SCRIPT_URL + "?id=" + encodeURIComponent(id));
